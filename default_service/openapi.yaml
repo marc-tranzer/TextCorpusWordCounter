@@ -1,0 +1,260 @@
+---
+openapi: 3.1.0
+info:
+  title: 'Inria Thesis: Data Management Test Exercise'
+  description: 'Exercise: U-Hopper Display More Frequent Words'
+  version: 0.1.0
+paths:
+  "/processing_text_tasks/{uuid}/results":
+    put:
+      tags:
+      - Processing Text Tasks
+      summary: Put Result In Task
+      description: Put results to the task
+      operationId: put_result_in_task_processing_text_tasks__uuid__results_put
+      parameters:
+      - required: true
+        schema:
+          type: string
+          format: uuid
+          title: Uuid
+        name: uuid
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/PutTextProcessingResultParams"
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/SingleProcessingTextTask"
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/HTTPValidationError"
+  "/tasks_queue":
+    get:
+      tags:
+      - Compute Tasks Queue
+      summary: Get Task From Queue
+      description: Dequeue a task of the pool
+      operationId: get_task_from_queue_tasks_queue_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/SingleProcessingTextTask"
+        '404':
+          description: Not Found
+    post:
+      tags:
+      - Compute Tasks Queue
+      summary: Create Task In Queue
+      description: Add a new task to the pool
+      operationId: create_task_in_queue_tasks_queue_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/SingleProcessingTextTaskCreate"
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/SingleProcessingTextTask"
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/HTTPValidationError"
+  "/text_corpus_locations":
+    post:
+      tags:
+      - Text Corpus Locations
+      summary: Add New Text Corpus Location
+      description: Add a new folder/corpus location to be processed
+      operationId: add_new_text_corpus_location_text_corpus_locations_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/SingleCorpusLocationCreate"
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/SingleCorpusLocationCreateResponse"
+        '404':
+          description: Not Found
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/HTTPValidationError"
+  "/u_hopper_display":
+    get:
+      tags:
+      - Compute Tasks Queue
+      summary: Display Result
+      description: Display the result of the file processing on a screen
+      operationId: display_result_u_hopper_display_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/UHopperDisplayResponse"
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            "$ref": "#/components/schemas/ValidationError"
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ProcessingTextTaskStatusEnum:
+      type: string
+      enum:
+      - NOT_STARTED
+      - IN_PROGRESS
+      - PROCESSED
+      - FAILED
+      title: ProcessingTextTaskStatusEnum
+      description: An enumeration.
+    PutTextProcessingResultParams:
+      properties:
+        status:
+          "$ref": "#/components/schemas/ProcessingTextTaskStatusEnum"
+        word_occurrences_result:
+          additionalProperties:
+            type: integer
+          type: object
+          title: Word Occurrences Result
+      type: object
+      required:
+      - status
+      title: PutTextProcessingResultParams
+    SingleCorpusLocationCreate:
+      properties:
+        folder_location:
+          type: string
+          title: Folder Location
+      type: object
+      required:
+      - folder_location
+      title: SingleCorpusLocationCreate
+    SingleCorpusLocationCreateResponse:
+      properties:
+        number_of_tasks_created:
+          type: integer
+          title: Number Of Tasks Created
+      type: object
+      required:
+      - number_of_tasks_created
+      title: SingleCorpusLocationCreateResponse
+    SingleProcessingTextTask:
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          title: Uuid
+        text_absolute_location:
+          type: string
+          title: Text Absolute Location
+        status:
+          allOf:
+          - "$ref": "#/components/schemas/ProcessingTextTaskStatusEnum"
+          default: NOT_STARTED
+        retry_count:
+          type: integer
+          title: Retry Count
+          default: 0
+        word_occurrences_result:
+          additionalProperties:
+            type: integer
+          type: object
+          title: Word Occurrences Result
+      type: object
+      required:
+      - uuid
+      - text_absolute_location
+      title: SingleProcessingTextTask
+    SingleProcessingTextTaskCreate:
+      properties:
+        text_absolute_location:
+          type: string
+          title: Text Absolute Location
+        status:
+          allOf:
+          - "$ref": "#/components/schemas/ProcessingTextTaskStatusEnum"
+          default: NOT_STARTED
+        retry_count:
+          type: integer
+          title: Retry Count
+          default: 0
+      type: object
+      required:
+      - text_absolute_location
+      title: SingleProcessingTextTaskCreate
+    UHopperDisplayResponse:
+      properties:
+        display:
+          items:
+            items:
+            - type: string
+            - type: integer
+            type: array
+            maxItems: 2
+            minItems: 2
+          type: array
+          title: Display
+      type: object
+      required:
+      - display
+      title: UHopperDisplayResponse
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError

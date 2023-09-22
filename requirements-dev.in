@@ -1,0 +1,9 @@
+# Test library
+pytest
+# Code quality
+flake8
+mypy
+# Code Format library
+black==23.3.0
+isort
+importlib-metadata==4.2.0

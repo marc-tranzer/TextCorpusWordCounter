@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+
+  text_corpus_word_counter:
+    networks:
+      - shared_network
+    build:
+      context: ./
+      dockerfile: ./default_service/Dockerfile
+    ports:
+      - "5001:5001"
+    environment:
+      - RUN_IN_DOCKER=1
+  text_processor:
+    networks:
+      - shared_network
+    build:
+      context: ./
+      dockerfile: ./remote_workers/Dockerfile
+    deploy:
+      replicas: 10
+    environment:
+      - RUN_IN_DOCKER=1
+networks:
+  shared_network:

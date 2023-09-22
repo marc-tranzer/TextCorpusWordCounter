@@ -1,0 +1,6 @@
+fastapi<1
+pydantic==1.10.9
+uvicorn
+sqlalchemy<2
+requests
+importlib-metadata==4.2.0
