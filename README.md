@@ -13,8 +13,8 @@ Although this doesn't represent a real-case scenario the corpus will be stored l
 accessible from both central and remote node
 
 On real life scenario:
-- We may want to have a documentDB to store the entire corpus,
-- or be able to automatically retrieve the corpus from a web URL.
+- We may want to have a File Database to store the entire corpus,
+- or be able to automatically retrieve file from a web URL.
 
 The goal of the project is to be able to process large file corpus within a 
 limited amount of time. The project should take into account that as the corpus grows larger, 
@@ -115,7 +115,7 @@ And a docker compose file that generate 10 processing node and the central serve
 ### Alternative approach And Discussion
 
 This approach scales well with CPU intensive processing task, which is not the case on this project.
-And scales poorly with I/O intensive operations which is the main bottleneck of the project.
+It scales poorly with I/O intensive operations which is the main bottleneck of the project.
 
 A different approach should have been to use the MapReduce approach with consistent hashing
 
@@ -153,7 +153,7 @@ To ensure our solution is stable we should have unit testing including:
     source .venv/bin/activate
     python3 default_service
 
-    # launch one remote note
+    # launch One Remote Nopde
     source .venv/bin/activate
     python3 workers/text_processor
 

@@ -18,7 +18,6 @@ class MostFrequentWordsCountResponse(pydantic.BaseModel):
     response_model=MostFrequentWordsCountResponse,
 )
 async def display_result(skip_if_process_incomplete: bool = False, limit: int = 10) -> MostFrequentWordsCountResponse:
-
     """Display the result of the file processing on a screen
     params:
     - limit: number of max words to return

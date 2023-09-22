@@ -4,6 +4,7 @@ import os
 import time
 from enum import Enum
 from pathlib import Path
+from typing import Any
 from uuid import UUID
 
 import pydantic
@@ -12,6 +13,7 @@ from pydantic import validator
 
 
 CENTRAL_NODE_URL = f"{'http://text_corpus_word_counter' if os.environ.get('RUN_IN_DOCKER') else 'http://0.0.0.0'}:5001"
+
 
 # DUPLICATE FROM resources.py
 # TODO(mt): Create shared library that all nodes can use
@@ -31,7 +33,7 @@ class SingleProcessingTextTask(pydantic.BaseModel):
     word_occurrences_result: dict[str, int] | None = None
 
     @validator("word_occurrences_result", pre=True)
-    def validate_word_occurrences_result(cls, value):
+    def validate_word_occurrences_result(cls, value: str | dict[str, int] | None) -> Any:
         if isinstance(value, str):
             return json.loads(value)
         else:

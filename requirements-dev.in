@@ -7,3 +7,6 @@ mypy
 black==23.3.0
 isort
 importlib-metadata==4.2.0
+
+# fastapi test lib required requirement
+httpx
