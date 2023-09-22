@@ -18,7 +18,7 @@ APP.include_router(text_corpus_location_router)
 APP.include_router(most_frequent_words_count_router)
 
 openapi_schema = get_openapi(
-    title="Inria Thesis: Data Management Test Exercise",
+    title="Word Counter Exercise",
     version="0.1.0",
     description="Display More Frequent Words from a text corpus",
     routes=APP.routes,

@@ -1,8 +1,8 @@
 ---
 openapi: 3.1.0
 info:
-  title: 'Inria Thesis: Data Management Test Exercise'
-  description: 'Exercise: U-Hopper Display More Frequent Words'
+  title: Word Counter Exercise
+  description: Display More Frequent Words from a text corpus
   version: 0.1.0
 paths:
   "/processing_text_tasks/{uuid}/results":
@@ -112,20 +112,41 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/HTTPValidationError"
-  "/u_hopper_display":
+  "/most_frequent_words_count":
     get:
       tags:
-      - Compute Tasks Queue
+      - ''
       summary: Display Result
       description: Display the result of the file processing on a screen
-      operationId: display_result_u_hopper_display_get
+      operationId: display_result_most_frequent_words_count_get
+      parameters:
+      - required: false
+        schema:
+          type: boolean
+          title: Skip If Process Incomplete
+          default: false
+        name: skip_if_process_incomplete
+        in: query
+      - required: false
+        schema:
+          type: integer
+          title: Limit
+          default: 10
+        name: limit
+        in: query
       responses:
         '200':
           description: Successful Response
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/UHopperDisplayResponse"
+                "$ref": "#/components/schemas/MostFrequentWordsCountResponse"
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/HTTPValidationError"
 components:
   schemas:
     HTTPValidationError:
@@ -137,6 +158,22 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    MostFrequentWordsCountResponse:
+      properties:
+        display:
+          items:
+            items:
+            - type: string
+            - type: integer
+            type: array
+            maxItems: 2
+            minItems: 2
+          type: array
+          title: Display
+      type: object
+      required:
+      - display
+      title: MostFrequentWordsCountResponse
     ProcessingTextTaskStatusEnum:
       type: string
       enum:
@@ -221,22 +258,6 @@ components:
       required:
       - text_absolute_location
       title: SingleProcessingTextTaskCreate
-    UHopperDisplayResponse:
-      properties:
-        display:
-          items:
-            items:
-            - type: string
-            - type: integer
-            type: array
-            maxItems: 2
-            minItems: 2
-          type: array
-          title: Display
-      type: object
-      required:
-      - display
-      title: UHopperDisplayResponse
     ValidationError:
       properties:
         loc:

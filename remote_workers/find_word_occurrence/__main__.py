@@ -11,7 +11,7 @@ import requests
 from pydantic import validator
 
 
-CENTRAL_NODE_URL = f"{'localhost' if os.environ.get('RUN_IN_DOCKER') else '0.0.0.0'}:5001"
+CENTRAL_NODE_URL = f"{'http://text_corpus_word_counter' if os.environ.get('RUN_IN_DOCKER') else 'http://0.0.0.0'}:5001"
 
 # DUPLICATE FROM resources.py
 # TODO(mt): Create shared library that all nodes can use
