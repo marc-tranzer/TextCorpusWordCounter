@@ -1,6 +1,4 @@
 import uvicorn
-from databases import models
-from databases.models.base import Base
 from fastapi import FastAPI
 from fastapi.openapi.utils import get_openapi
 from routers.processing_text_tasks import tasks_router

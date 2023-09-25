@@ -1,6 +1,4 @@
 # Define a simple User class as an example
-from uuid import uuid4
-
 from databases.models.base import Base
 from resources.tasks import ProcessingTextTaskStatusEnum
 from sqlalchemy import Column

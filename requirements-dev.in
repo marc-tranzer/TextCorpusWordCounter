@@ -3,6 +3,7 @@ pytest
 # Code quality
 flake8
 mypy
+types-requests
 # Code Format library
 black==23.3.0
 isort
